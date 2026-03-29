@@ -1,0 +1,180 @@
+{
+  "avg_accuracy": 0.4688,
+  "avg_f1": 0.5041,
+  "n_splits": 5,
+  "n_samples": 197,
+  "n_features": 31,
+  "fold_results": [
+    {
+      "fold": 1,
+      "train_size": 37,
+      "val_size": 32,
+      "accuracy": 0.5312,
+      "f1": 0.3478,
+      "precision": 1.0,
+      "recall": 0.2105
+    },
+    {
+      "fold": 2,
+      "train_size": 69,
+      "val_size": 32,
+      "accuracy": 0.4688,
+      "f1": 0.5641,
+      "precision": 0.5789,
+      "recall": 0.55
+    },
+    {
+      "fold": 3,
+      "train_size": 101,
+      "val_size": 32,
+      "accuracy": 0.375,
+      "f1": 0.4444,
+      "precision": 0.4444,
+      "recall": 0.4444
+    },
+    {
+      "fold": 4,
+      "train_size": 133,
+      "val_size": 32,
+      "accuracy": 0.4688,
+      "f1": 0.5854,
+      "precision": 0.6667,
+      "recall": 0.5217
+    },
+    {
+      "fold": 5,
+      "train_size": 165,
+      "val_size": 32,
+      "accuracy": 0.5,
+      "f1": 0.5789,
+      "precision": 0.44,
+      "recall": 0.8462
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "price_vs_sma_5",
+      "importance": 0.0616
+    },
+    {
+      "feature": "ema_12",
+      "importance": 0.0597
+    },
+    {
+      "feature": "avg_sentiment",
+      "importance": 0.0594
+    },
+    {
+      "feature": "intraday_volatility",
+      "importance": 0.0577
+    },
+    {
+      "feature": "push_net_avg",
+      "importance": 0.0572
+    },
+    {
+      "feature": "sentiment_lag1",
+      "importance": 0.053
+    },
+    {
+      "feature": "sma_5",
+      "importance": 0.0528
+    },
+    {
+      "feature": "sma_20",
+      "importance": 0.0521
+    },
+    {
+      "feature": "volatility_5d",
+      "importance": 0.0517
+    },
+    {
+      "feature": "max_sentiment",
+      "importance": 0.0512
+    },
+    {
+      "feature": "price_vs_sma_20",
+      "importance": 0.051
+    },
+    {
+      "feature": "bullish_ratio",
+      "importance": 0.0504
+    },
+    {
+      "feature": "sentiment_momentum",
+      "importance": 0.0502
+    },
+    {
+      "feature": "sentiment_lag3",
+      "importance": 0.048
+    },
+    {
+      "feature": "sentiment_std",
+      "importance": 0.0469
+    },
+    {
+      "feature": "article_count_ma3",
+      "importance": 0.0437
+    },
+    {
+      "feature": "volume_change_pct",
+      "importance": 0.0419
+    },
+    {
+      "feature": "discussion_heat",
+      "importance": 0.0389
+    },
+    {
+      "feature": "sentiment_lag2",
+      "importance": 0.0362
+    },
+    {
+      "feature": "min_sentiment",
+      "importance": 0.0215
+    },
+    {
+      "feature": "article_count",
+      "importance": 0.0148
+    },
+    {
+      "feature": "news_article_count",
+      "importance": 0.0
+    },
+    {
+      "feature": "news_avg_sentiment",
+      "importance": 0.0
+    },
+    {
+      "feature": "news_max_sentiment",
+      "importance": 0.0
+    },
+    {
+      "feature": "news_min_sentiment",
+      "importance": 0.0
+    },
+    {
+      "feature": "news_sentiment_std",
+      "importance": 0.0
+    },
+    {
+      "feature": "news_bullish_ratio",
+      "importance": 0.0
+    },
+    {
+      "feature": "news_available",
+      "importance": 0.0
+    },
+    {
+      "feature": "news_sentiment_lag1",
+      "importance": 0.0
+    },
+    {
+      "feature": "news_sentiment_lag2",
+      "importance": 0.0
+    },
+    {
+      "feature": "sentiment_divergence",
+      "importance": 0.0
+    }
+  ]
+}
