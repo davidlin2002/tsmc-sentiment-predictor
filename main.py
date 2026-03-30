@@ -146,7 +146,8 @@ def stage_sentiment(articles=None, cnyes_articles=None):
     if cnyes_articles:
         logger.info(f"開始分析 {len(cnyes_articles)} 篇鉅亨新聞...")
         cnyes_enriched = analyzer.batch_analyze(cnyes_articles, source="news")
-        analyzer.save_results(cnyes_enriched, filename="cnyes_with_sentiment.jsonl")
+        analyzer.save_results(
+            cnyes_enriched, filename="cnyes_with_sentiment.jsonl")
 
     stats = analyzer.get_cache_stats()
     logger.info(f"快取中有 {stats['cached_articles']} 篇文章（含新聞）")
@@ -199,12 +200,15 @@ def stage_features(enriched_articles=None, price_df=None, cnyes_enriched=None):
                     cnyes_enriched.append(json.loads(line))
 
     if cnyes_enriched:
-        news_daily_sentiment = aligner.aggregate_daily_sentiment(cnyes_enriched)
-        aligner.save_daily_sentiment(news_daily_sentiment, filename="daily_news_sentiment.csv")
+        news_daily_sentiment = aligner.aggregate_daily_sentiment(
+            cnyes_enriched)
+        aligner.save_daily_sentiment(
+            news_daily_sentiment, filename="daily_news_sentiment.csv")
         logger.info(f"新聞每日情緒: {len(news_daily_sentiment)} 個交易日")
 
     engineer = FeatureEngineer()
-    features = engineer.build_features(price_df, daily_sentiment, news_daily_sentiment)
+    features = engineer.build_features(
+        price_df, daily_sentiment, news_daily_sentiment)
     engineer.save_features(features)
 
     return features
@@ -237,9 +241,27 @@ def stage_model(features=None):
     return results
 
 
+def stage_ablation(features=None):
+    """Stage 5: Ablation Study + 多模型比較"""
+    from src.model.ablation import run_all
+
+    logger.info("=" * 50)
+    logger.info("Stage 5: Ablation Study + 多模型比較")
+    logger.info("=" * 50)
+
+    if features is None:
+        filepath = FINAL_DIR / "features.csv"
+        if not filepath.exists():
+            logger.error(f"找不到 {filepath}，請先跑 stage_features")
+            return None
+        features = pd.read_csv(filepath, index_col=0, parse_dates=True)
+
+    return run_all(features)
+
+
 def main():
     parser = argparse.ArgumentParser(description=f"{STOCK_NAME} 情緒分析 Pipeline")
-    parser.add_argument("--stage", choices=["scrape", "sentiment", "features", "model", "all"],
+    parser.add_argument("--stage", choices=["scrape", "sentiment", "features", "model", "ablation", "all"],
                         default="all")
     parser.add_argument("--test", action="store_true", help="測試模式（少量資料）")
     args = parser.parse_args()
@@ -262,6 +284,9 @@ def main():
 
     if args.stage in ("model", "all"):
         stage_model(features)
+
+    if args.stage in ("ablation", "all"):
+        stage_ablation(features)
 
     elapsed = (datetime.now() - start_time).total_seconds()
     logger.info(f"Pipeline 完成！耗時 {elapsed:.1f} 秒")

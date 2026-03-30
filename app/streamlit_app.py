@@ -39,20 +39,28 @@ def load_data():
 
     sentiment_path = PROCESSED_DIR / "daily_sentiment.csv"
     if sentiment_path.exists():
-        data["sentiment"] = pd.read_csv(sentiment_path, index_col=0, parse_dates=True)
+        data["sentiment"] = pd.read_csv(
+            sentiment_path, index_col=0, parse_dates=True)
 
     news_sentiment_path = PROCESSED_DIR / "daily_news_sentiment.csv"
     if news_sentiment_path.exists():
-        data["news_sentiment"] = pd.read_csv(news_sentiment_path, index_col=0, parse_dates=True)
+        data["news_sentiment"] = pd.read_csv(
+            news_sentiment_path, index_col=0, parse_dates=True)
 
     features_path = FINAL_DIR / "features.csv"
     if features_path.exists():
-        data["features"] = pd.read_csv(features_path, index_col=0, parse_dates=True)
+        data["features"] = pd.read_csv(
+            features_path, index_col=0, parse_dates=True)
 
     results_path = FINAL_DIR / "model_results.json"
     if results_path.exists():
         with open(results_path, "r", encoding="utf-8") as f:
             data["model_results"] = json.load(f)
+
+    ablation_path = FINAL_DIR / "ablation_results.json"
+    if ablation_path.exists():
+        with open(ablation_path, "r", encoding="utf-8") as f:
+            data["ablation_results"] = json.load(f)
 
     articles_path = PROCESSED_DIR / "ptt_with_sentiment.jsonl"
     if articles_path.exists():
@@ -83,8 +91,8 @@ if not data:
 # ================================================================== #
 #  Tab 分頁
 # ================================================================== #
-tab1, tab2, tab3, tab4 = st.tabs([
-    "📈 股價與情緒", "📊 模型結果", "📝 文章瀏覽", "🔍 即時分析"
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    "📈 股價與情緒", "📊 模型結果", "🧪 Ablation Study", "📝 文章瀏覽", "🔍 即時分析"
 ])
 
 
@@ -118,8 +126,10 @@ with tab1:
         }[date_range]
 
         price_filtered = price_df[price_df.index >= cutoff]
-        sent_filtered = sent_df[sent_df.index >= cutoff] if sent_df is not None else None
-        news_filtered = news_df[news_df.index >= cutoff] if news_df is not None else None
+        sent_filtered = sent_df[sent_df.index >=
+                                cutoff] if sent_df is not None else None
+        news_filtered = news_df[news_df.index >=
+                                cutoff] if news_df is not None else None
 
         # --- 主圖：K線 + 成交量 + 情緒 ---
         has_volume = "volume" in price_filtered.columns
@@ -184,13 +194,15 @@ with tab1:
                 fig.add_trace(go.Scatter(
                     x=bull_pts.index, y=bull_pts["avg_sentiment"],
                     mode="markers", name="極樂觀",
-                    marker=dict(color="#26a69a", size=14, symbol="triangle-up"),
+                    marker=dict(color="#26a69a", size=14,
+                                symbol="triangle-up"),
                 ), row=sentiment_row, col=1)
             if not bear_pts.empty:
                 fig.add_trace(go.Scatter(
                     x=bear_pts.index, y=bear_pts["avg_sentiment"],
                     mode="markers", name="極悲觀",
-                    marker=dict(color="#ef5350", size=14, symbol="triangle-down"),
+                    marker=dict(color="#ef5350", size=14,
+                                symbol="triangle-down"),
                 ), row=sentiment_row, col=1)
 
         # 鉅亨情緒
@@ -211,7 +223,8 @@ with tab1:
             height=680,
             xaxis_rangeslider_visible=False,
             showlegend=True,
-            legend=dict(orientation="h", yanchor="bottom", y=1.01, xanchor="right", x=1),
+            legend=dict(orientation="h", yanchor="bottom",
+                        y=1.01, xanchor="right", x=1),
             margin=dict(t=60),
         )
         st.plotly_chart(fig, use_container_width=True)
@@ -219,7 +232,8 @@ with tab1:
         # --- 統計摘要列 ---
         latest = price_filtered.iloc[-1]
         earliest = price_filtered.iloc[0]
-        period_return = (latest["close"] - earliest["close"]) / earliest["close"] * 100
+        period_return = (latest["close"] -
+                         earliest["close"]) / earliest["close"] * 100
 
         c1, c2, c3, c4, c5 = st.columns(5)
         c1.metric("最新收盤", f"${latest['close']:,.0f}",
@@ -244,14 +258,17 @@ with tab1:
 
                 with col_a:
                     st.markdown("**情緒分數 vs 隔日漲跌**")
-                    scatter_df = feat_filtered[["avg_sentiment", "label", "next_change_pct"]].dropna()
-                    scatter_df["漲跌"] = scatter_df["label"].map({1.0: "漲", 0.0: "跌"})
+                    scatter_df = feat_filtered[[
+                        "avg_sentiment", "label", "next_change_pct"]].dropna()
+                    scatter_df["漲跌"] = scatter_df["label"].map(
+                        {1.0: "漲", 0.0: "跌"})
                     fig_sc = px.scatter(
                         scatter_df,
                         x="avg_sentiment", y="next_change_pct",
                         color="漲跌",
                         color_discrete_map={"漲": "#26a69a", "跌": "#ef5350"},
-                        labels={"avg_sentiment": "PTT 平均情緒", "next_change_pct": "隔日漲跌 (%)"},
+                        labels={"avg_sentiment": "PTT 平均情緒",
+                                "next_change_pct": "隔日漲跌 (%)"},
                         height=320,
                     )
                     fig_sc.add_vline(x=0, line_dash="dash", line_color="gray")
@@ -264,7 +281,8 @@ with tab1:
                         fig_bar = px.bar(
                             feat_filtered.reset_index(),
                             x="trade_date", y="article_count",
-                            labels={"trade_date": "日期", "article_count": "PTT 文章數"},
+                            labels={"trade_date": "日期",
+                                    "article_count": "PTT 文章數"},
                             color_discrete_sequence=["#f4a621"],
                             height=320,
                         )
@@ -351,7 +369,7 @@ with tab2:
         with st.expander("查看各折詳細數據"):
             display_fold = fold_df.copy()
             display_fold.columns = ["Fold", "訓練筆數", "驗證筆數",
-                                     "Accuracy", "F1", "Precision", "Recall"]
+                                    "Accuracy", "F1", "Precision", "Recall"]
             st.dataframe(
                 display_fold.style.format({
                     "Accuracy": "{:.2%}", "F1": "{:.2%}",
@@ -424,7 +442,8 @@ with tab2:
                 color_discrete_map=color_map,
                 height=280,
             )
-            fig_pie.update_traces(textposition="inside", textinfo="percent+label")
+            fig_pie.update_traces(textposition="inside",
+                                  textinfo="percent+label")
             fig_pie.update_layout(showlegend=False, margin=dict(t=20))
             st.plotly_chart(fig_pie, use_container_width=True)
         else:
@@ -432,9 +451,153 @@ with tab2:
 
 
 # ================================================================== #
-#  Tab 3: 文章瀏覽
+#  Tab 3: Ablation Study
 # ================================================================== #
 with tab3:
+    if "ablation_results" not in data:
+        st.warning("尚未執行 Ablation Study，請執行：")
+        st.code("python main.py --stage ablation")
+    else:
+        ab = data["ablation_results"]
+
+        st.subheader("Ablation Study — 情緒特徵貢獻度驗證")
+        st.caption(
+            "固定使用 XGBoost，逐步加入不同特徵組合，驗證「PTT 情緒是否帶來預測提升」。"
+            "若 C > A，代表情緒特徵確實有貢獻。"
+        )
+
+        abl = ab.get("ablation", {})
+        groups = list(abl.keys())
+        accs = [abl[g]["avg_accuracy"] for g in groups]
+        f1s  = [abl[g]["avg_f1"] for g in groups]
+        nf   = [abl[g]["n_features"] for g in groups]
+
+        # 顏色：C 組（技術+PTT）高亮
+        bar_colors = ["#90caf9", "#ffcc80", "#26a69a", "#80cbc4"]
+
+        ab_col1, ab_col2 = st.columns(2)
+
+        with ab_col1:
+            st.markdown("**各特徵組合 Accuracy**")
+            fig_abl_acc = go.Figure(go.Bar(
+                x=groups, y=accs,
+                marker_color=bar_colors,
+                text=[f"{v:.1%}" for v in accs],
+                textposition="outside",
+            ))
+            fig_abl_acc.add_hline(y=0.5, line_dash="dash", line_color="red",
+                                  annotation_text="隨機基準 50%",
+                                  annotation_position="bottom right")
+            fig_abl_acc.update_layout(
+                height=380, yaxis=dict(range=[0.3, 0.65], tickformat=".0%"),
+                margin=dict(t=20, b=60), xaxis_tickangle=-20,
+            )
+            st.plotly_chart(fig_abl_acc, use_container_width=True)
+
+        with ab_col2:
+            st.markdown("**各特徵組合 F1 Score**")
+            fig_abl_f1 = go.Figure(go.Bar(
+                x=groups, y=f1s,
+                marker_color=bar_colors,
+                text=[f"{v:.1%}" for v in f1s],
+                textposition="outside",
+            ))
+            fig_abl_f1.add_hline(y=0.5, line_dash="dash", line_color="red",
+                                 annotation_text="隨機基準 50%",
+                                 annotation_position="bottom right")
+            fig_abl_f1.update_layout(
+                height=380, yaxis=dict(range=[0.3, 0.65], tickformat=".0%"),
+                margin=dict(t=20, b=60), xaxis_tickangle=-20,
+            )
+            st.plotly_chart(fig_abl_f1, use_container_width=True)
+
+        # 結論摘要
+        if len(accs) >= 3:
+            delta_acc = accs[2] - accs[0]
+            delta_f1  = f1s[2]  - f1s[0]
+            conclusion = "✅ 加入情緒特徵後準確率提升" if delta_acc > 0 else "⚠️ 情緒特徵未帶來準確率提升"
+            st.info(
+                f"{conclusion}  \n"
+                f"技術指標（A）→ 技術+PTT情緒（C）：Accuracy **{delta_acc:+.1%}**，F1 **{delta_f1:+.1%}**"
+            )
+
+        st.divider()
+
+        # 多模型比較
+        st.subheader("多模型比較 — 為什麼選 XGBoost？")
+        st.caption("固定特徵組合（技術 + PTT 情緒），比較不同演算法的表現。")
+
+        mc = ab.get("model_comparison", {})
+        models = list(mc.keys())
+        mc_accs = [mc[m]["avg_accuracy"] for m in models]
+        mc_f1s  = [mc[m]["avg_f1"] for m in models]
+
+        model_colors = {
+            "Logistic Regression": "#90caf9",
+            "Random Forest": "#ffcc80",
+            "XGBoost": "#26a69a",
+            "LightGBM": "#ce93d8",
+        }
+        mc_colors = [model_colors.get(m, "gray") for m in models]
+
+        mc_col1, mc_col2 = st.columns(2)
+        with mc_col1:
+            st.markdown("**各模型 Accuracy**")
+            fig_mc_acc = go.Figure(go.Bar(
+                x=models, y=mc_accs,
+                marker_color=mc_colors,
+                text=[f"{v:.1%}" for v in mc_accs],
+                textposition="outside",
+            ))
+            fig_mc_acc.add_hline(y=0.5, line_dash="dash", line_color="red")
+            fig_mc_acc.update_layout(
+                height=320, yaxis=dict(range=[0.3, 0.65], tickformat=".0%"),
+                margin=dict(t=20),
+            )
+            st.plotly_chart(fig_mc_acc, use_container_width=True)
+
+        with mc_col2:
+            st.markdown("**各模型 F1 Score**")
+            fig_mc_f1 = go.Figure(go.Bar(
+                x=models, y=mc_f1s,
+                marker_color=mc_colors,
+                text=[f"{v:.1%}" for v in mc_f1s],
+                textposition="outside",
+            ))
+            fig_mc_f1.add_hline(y=0.5, line_dash="dash", line_color="red")
+            fig_mc_f1.update_layout(
+                height=320, yaxis=dict(range=[0.3, 0.65], tickformat=".0%"),
+                margin=dict(t=20),
+            )
+            st.plotly_chart(fig_mc_f1, use_container_width=True)
+
+        # 各模型詳細表格
+        with st.expander("查看各模型詳細數據"):
+            mc_rows = []
+            for m in models:
+                fold_df = pd.DataFrame(mc[m]["fold_results"])
+                mc_rows.append({
+                    "模型": m,
+                    "Accuracy": mc[m]["avg_accuracy"],
+                    "F1": mc[m]["avg_f1"],
+                    "Acc 標準差": round(fold_df["accuracy"].std(), 4),
+                    "F1 標準差": round(fold_df["f1"].std(), 4),
+                })
+            mc_df = pd.DataFrame(mc_rows)
+            st.dataframe(
+                mc_df.style.format({
+                    "Accuracy": "{:.2%}", "F1": "{:.2%}",
+                    "Acc 標準差": "{:.4f}", "F1 標準差": "{:.4f}",
+                }).highlight_max(subset=["Accuracy", "F1"], color="#c8e6c9"),
+                use_container_width=True,
+                hide_index=True,
+            )
+
+
+# ================================================================== #
+#  Tab 4: 文章瀏覽
+# ================================================================== #
+with tab4:
     ptt_articles = data.get("articles", [])
     cnyes_articles = data.get("cnyes_articles", [])
     has_ptt = len(ptt_articles) > 0
@@ -464,7 +627,8 @@ with tab3:
             )
 
         with fc3:
-            sort_by = st.radio("排序", ["時間（新→舊）", "情緒分數（高→低）", "情緒分數（低→高）"], horizontal=True)
+            sort_by = st.radio(
+                "排序", ["時間（新→舊）", "情緒分數（高→低）", "情緒分數（低→高）"], horizontal=True)
 
         # --- 組合文章池 ---
         if "鉅亨" in source_filter:
@@ -544,13 +708,14 @@ with tab3:
                         st.info(f"💡 {reasoning}")
                     content = article.get("content", "")
                     if content:
-                        st.caption(content[:400] + ("..." if len(content) > 400 else ""))
+                        st.caption(
+                            content[:400] + ("..." if len(content) > 400 else ""))
 
 
 # ================================================================== #
-#  Tab 4: 即時情緒分析
+#  Tab 5: 即時情緒分析
 # ================================================================== #
-with tab4:
+with tab5:
     st.subheader("即時情緒分析")
     st.caption("輸入任何標題，AI 即時判斷對台積電股價的情緒影響")
 
@@ -580,7 +745,8 @@ with tab4:
             try:
                 from src.sentiment.llm_analyzer import SentimentAnalyzer
                 analyzer = SentimentAnalyzer()
-                result = analyzer.analyze(f"realtime_{hash(user_input)}", user_input)
+                result = analyzer.analyze(
+                    f"realtime_{hash(user_input)}", user_input)
 
                 if result:
                     score = result["score"]

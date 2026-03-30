@@ -1,0 +1,302 @@
+{
+  "ablation": {
+    "A: 技術指標（基準線）": {
+      "avg_accuracy": 0.4375,
+      "avg_f1": 0.446,
+      "n_features": 8,
+      "fold_results": [
+        {
+          "fold": 1,
+          "accuracy": 0.4375,
+          "f1": 0.1,
+          "precision": 1.0,
+          "recall": 0.0526
+        },
+        {
+          "fold": 2,
+          "accuracy": 0.4688,
+          "f1": 0.5641,
+          "precision": 0.5789,
+          "recall": 0.55
+        },
+        {
+          "fold": 3,
+          "accuracy": 0.5,
+          "f1": 0.5556,
+          "precision": 0.5556,
+          "recall": 0.5556
+        },
+        {
+          "fold": 4,
+          "accuracy": 0.4062,
+          "f1": 0.4865,
+          "precision": 0.6429,
+          "recall": 0.3913
+        },
+        {
+          "fold": 5,
+          "accuracy": 0.375,
+          "f1": 0.5238,
+          "precision": 0.3793,
+          "recall": 0.8462
+        }
+      ]
+    },
+    "B: PTT 情緒特徵": {
+      "avg_accuracy": 0.4375,
+      "avg_f1": 0.482,
+      "n_features": 13,
+      "fold_results": [
+        {
+          "fold": 1,
+          "accuracy": 0.4375,
+          "f1": 0.5263,
+          "precision": 0.5263,
+          "recall": 0.5263
+        },
+        {
+          "fold": 2,
+          "accuracy": 0.5,
+          "f1": 0.619,
+          "precision": 0.5909,
+          "recall": 0.65
+        },
+        {
+          "fold": 3,
+          "accuracy": 0.3125,
+          "f1": 0.1538,
+          "precision": 0.25,
+          "recall": 0.1111
+        },
+        {
+          "fold": 4,
+          "accuracy": 0.5938,
+          "f1": 0.7111,
+          "precision": 0.7273,
+          "recall": 0.6957
+        },
+        {
+          "fold": 5,
+          "accuracy": 0.3438,
+          "f1": 0.4,
+          "precision": 0.3182,
+          "recall": 0.5385
+        }
+      ]
+    },
+    "C: 技術 + PTT 情緒": {
+      "avg_accuracy": 0.4875,
+      "avg_f1": 0.5234,
+      "n_features": 21,
+      "fold_results": [
+        {
+          "fold": 1,
+          "accuracy": 0.5312,
+          "f1": 0.3478,
+          "precision": 1.0,
+          "recall": 0.2105
+        },
+        {
+          "fold": 2,
+          "accuracy": 0.4688,
+          "f1": 0.5641,
+          "precision": 0.5789,
+          "recall": 0.55
+        },
+        {
+          "fold": 3,
+          "accuracy": 0.375,
+          "f1": 0.4444,
+          "precision": 0.4444,
+          "recall": 0.4444
+        },
+        {
+          "fold": 4,
+          "accuracy": 0.5625,
+          "f1": 0.6818,
+          "precision": 0.7143,
+          "recall": 0.6522
+        },
+        {
+          "fold": 5,
+          "accuracy": 0.5,
+          "f1": 0.5789,
+          "precision": 0.44,
+          "recall": 0.8462
+        }
+      ]
+    },
+    "D: 技術 + PTT + 新聞（完整）": {
+      "avg_accuracy": 0.4875,
+      "avg_f1": 0.5234,
+      "n_features": 31,
+      "fold_results": [
+        {
+          "fold": 1,
+          "accuracy": 0.5312,
+          "f1": 0.3478,
+          "precision": 1.0,
+          "recall": 0.2105
+        },
+        {
+          "fold": 2,
+          "accuracy": 0.4688,
+          "f1": 0.5641,
+          "precision": 0.5789,
+          "recall": 0.55
+        },
+        {
+          "fold": 3,
+          "accuracy": 0.375,
+          "f1": 0.4444,
+          "precision": 0.4444,
+          "recall": 0.4444
+        },
+        {
+          "fold": 4,
+          "accuracy": 0.5625,
+          "f1": 0.6818,
+          "precision": 0.7143,
+          "recall": 0.6522
+        },
+        {
+          "fold": 5,
+          "accuracy": 0.5,
+          "f1": 0.5789,
+          "precision": 0.44,
+          "recall": 0.8462
+        }
+      ]
+    }
+  },
+  "model_comparison": {
+    "Logistic Regression": {
+      "avg_accuracy": 0.5,
+      "avg_f1": 0.5266,
+      "n_features": 21,
+      "fold_results": [
+        {
+          "fold": 1,
+          "accuracy": 0.5,
+          "f1": 0.3333,
+          "precision": 0.8,
+          "recall": 0.2105
+        },
+        {
+          "fold": 2,
+          "accuracy": 0.4062,
+          "f1": 0.3448,
+          "precision": 0.5556,
+          "recall": 0.25
+        },
+        {
+          "fold": 3,
+          "accuracy": 0.4688,
+          "f1": 0.5641,
+          "precision": 0.5238,
+          "recall": 0.6111
+        },
+        {
+          "fold": 4,
+          "accuracy": 0.6875,
+          "f1": 0.8,
+          "precision": 0.7407,
+          "recall": 0.8696
+        },
+        {
+          "fold": 5,
+          "accuracy": 0.4375,
+          "f1": 0.5909,
+          "precision": 0.4194,
+          "recall": 1.0
+        }
+      ]
+    },
+    "Random Forest": {
+      "avg_accuracy": 0.4875,
+      "avg_f1": 0.5072,
+      "n_features": 21,
+      "fold_results": [
+        {
+          "fold": 1,
+          "accuracy": 0.4062,
+          "f1": 0.0952,
+          "precision": 0.5,
+          "recall": 0.0526
+        },
+        {
+          "fold": 2,
+          "accuracy": 0.6562,
+          "f1": 0.7843,
+          "precision": 0.6452,
+          "recall": 1.0
+        },
+        {
+          "fold": 3,
+          "accuracy": 0.4688,
+          "f1": 0.5641,
+          "precision": 0.5238,
+          "recall": 0.6111
+        },
+        {
+          "fold": 4,
+          "accuracy": 0.5,
+          "f1": 0.5556,
+          "precision": 0.7692,
+          "recall": 0.4348
+        },
+        {
+          "fold": 5,
+          "accuracy": 0.4062,
+          "f1": 0.5366,
+          "precision": 0.3929,
+          "recall": 0.8462
+        }
+      ]
+    },
+    "XGBoost": {
+      "avg_accuracy": 0.4875,
+      "avg_f1": 0.5234,
+      "n_features": 21,
+      "fold_results": [
+        {
+          "fold": 1,
+          "accuracy": 0.5312,
+          "f1": 0.3478,
+          "precision": 1.0,
+          "recall": 0.2105
+        },
+        {
+          "fold": 2,
+          "accuracy": 0.4688,
+          "f1": 0.5641,
+          "precision": 0.5789,
+          "recall": 0.55
+        },
+        {
+          "fold": 3,
+          "accuracy": 0.375,
+          "f1": 0.4444,
+          "precision": 0.4444,
+          "recall": 0.4444
+        },
+        {
+          "fold": 4,
+          "accuracy": 0.5625,
+          "f1": 0.6818,
+          "precision": 0.7143,
+          "recall": 0.6522
+        },
+        {
+          "fold": 5,
+          "accuracy": 0.5,
+          "f1": 0.5789,
+          "precision": 0.44,
+          "recall": 0.8462
+        }
+      ]
+    }
+  },
+  "n_samples": 197,
+  "n_splits": 5
+}
